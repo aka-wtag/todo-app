@@ -18,7 +18,10 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    taskContainer.innerHTML = `<li>${task.title}, ${task.createdAt}</li>`.concat(taskContainer.innerHTML);
+    taskContainer.innerHTML = `<li id="${task.id}">
+                                    ${task.title}, ${task.createdAt} 
+                                    <button onclick="deleteTaskHandler(this)">Delete</button>
+                                </li>`.concat(taskContainer.innerHTML);
 };
 
 const createTask = (taskTitle) => {
@@ -27,6 +30,14 @@ const createTask = (taskTitle) => {
         "title": taskTitle,
         "createdAt": new Date().toLocaleDateString()
     }
+};
+
+const deleteTaskHandler = (event) => {
+    const taskElement = event.parentElement;
+    const taskId = event.parentElement.id;
+
+    taskElement.remove();
+    taskList = taskList.filter((task) => task.id!=taskId);
 };
 
 addButton.addEventListener("click", addTaskHandler);
