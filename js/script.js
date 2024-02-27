@@ -18,7 +18,9 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    taskContainer.innerHTML = `<li>${task.title}, ${task.createdAt}</li>`.concat(taskContainer.innerHTML);
+    const taskElement = createTaskElement(task);
+
+    taskContainer.innerHTML = taskElement.outerHTML.concat(taskContainer.innerHTML);
 };
 
 const createTask = (taskTitle) => {
@@ -27,6 +29,13 @@ const createTask = (taskTitle) => {
         "title": taskTitle,
         "createdAt": new Date().toLocaleDateString()
     }
+};
+
+const createTaskElement = (task) => {
+    const taskElement = document.createElement("li");
+    taskElement.innerHTML = `<li>${task.title}, ${task.createdAt}</li>`;
+
+    return taskElement;
 };
 
 addButton.addEventListener("click", addTaskHandler);
