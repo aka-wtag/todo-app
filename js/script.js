@@ -1,13 +1,11 @@
-const taskInput = document.getElementById("input-task");
-const addButton = document.getElementById("add-task");
-const taskContainer = document.getElementById("task-container");
+import { $taskInput, $taskContainer, $addButton} from "./element.js";
 
 const reg = /[&<>"'/`]/ig;
 
 let taskList = [];
 
 const addTaskHandler = () => {
-    const taskTitle = taskInput.value.replace(reg, "").trim();
+    const taskTitle = $taskInput.value.replace(reg, "").trim();
     
     if (!taskTitle.length) {
         alert("Please enter your task");
@@ -20,7 +18,7 @@ const addTaskHandler = () => {
 
     const taskElement = createTaskElement(task);
 
-    taskContainer.innerHTML = taskElement.outerHTML.concat(taskContainer.innerHTML);
+    $taskContainer.innerHTML = taskElement.outerHTML.concat($taskContainer.innerHTML);
 };
 
 const createTask = (taskTitle) => {
@@ -38,4 +36,4 @@ const createTaskElement = (task) => {
     return taskElement;
 };
 
-addButton.addEventListener("click", addTaskHandler);
+$addButton.addEventListener("click", addTaskHandler);
