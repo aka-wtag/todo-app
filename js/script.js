@@ -21,7 +21,6 @@ const addTaskHandler = () => {
 
     const taskElement = createTaskElement(task);
     $taskContainer.prepend(taskElement);
-    // $taskContainer.innerHTML = taskElement.outerHTML.concat($taskContainer.innerHTML);
 };
 
 const createTask = (taskTitle) => {
