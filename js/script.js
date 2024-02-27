@@ -27,7 +27,7 @@ const addTaskHandler = () => {
 
 const createTask = (taskTitle) => {
     return {
-        "id": taskList.length+1,
+        "id": Date.now(),
         "title": taskTitle,
         "createdAt": new Date().toLocaleDateString()
     }
