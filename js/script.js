@@ -7,7 +7,7 @@ const reg = /[&<>"'/`]/ig;
 let taskList = [];
 
 const addTaskHandler = () => {
-    const taskTitle = taskInput.value.replace(reg, "");
+    const taskTitle = taskInput.value.replace(reg, "").trim();
     
     if (!taskTitle.length) {
         alert("Please enter your task");
