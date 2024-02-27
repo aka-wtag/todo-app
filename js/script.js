@@ -1,4 +1,4 @@
-import { $taskInput, $taskContainer, $addButton} from "./element.js";
+import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
 
 const reg = /[&<>"'/`]/ig;
 
@@ -8,8 +8,12 @@ const addTaskHandler = () => {
     const taskTitle = $taskInput.value.replace(reg, "").trim();
     
     if (!taskTitle.length) {
-        alert("Please enter your task");
+        $errorMessage.hidden = false;
+        $errorMessage.innerHTML = "Task Name must be provided";
         return;
+    }
+    else{
+        $errorMessage.hidden = true;
     }
 
     const task = createTask(taskTitle);
