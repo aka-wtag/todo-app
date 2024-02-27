@@ -33,7 +33,7 @@ const createTask = (taskTitle) => {
 
 const createTaskElement = (task) => {
     const taskElement = document.createElement("li");
-    taskElement.innerHTML = `<li>${task.title}, ${task.createdAt}</li>`;
+    taskElement.innerHTML = `${task.title}, ${task.createdAt}`;
 
     return taskElement;
 };
