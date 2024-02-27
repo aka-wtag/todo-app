@@ -1,11 +1,10 @@
 import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
-
-const reg = /[&<>"'/`]/ig;
+import { sanitizeInput } from "./utility.js";
 
 let taskList = [];
 
 const addTaskHandler = () => {
-    const taskTitle = $taskInput.value.replace(reg, "").trim();
+    const taskTitle = sanitizeInput($taskInput.value);
     
     if (!taskTitle.length) {
         $errorMessage.hidden = false;
