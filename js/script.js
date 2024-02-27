@@ -20,8 +20,8 @@ const addTaskHandler = () => {
     taskList.unshift(task);
 
     const taskElement = createTaskElement(task);
-
-    $taskContainer.innerHTML = taskElement.outerHTML.concat($taskContainer.innerHTML);
+    $taskContainer.prepend(taskElement);
+    // $taskContainer.innerHTML = taskElement.outerHTML.concat($taskContainer.innerHTML);
 };
 
 const createTask = (taskTitle) => {
