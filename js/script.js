@@ -1,4 +1,4 @@
-import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
+import { $taskInput, $taskContainer, $addButton, $errorMessage, $searchButton, $searchInput} from "./element.js";
 import { sanitizeInput } from "./utility.js";
 
 let taskList = [];
@@ -95,7 +95,17 @@ const createTaskElement = (task) => {
 
     $taskElement.id = task.id;
     
-    $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+    if(task.isDone){
+        const $strikeTaskDetails = document.createElement("s");
+        $strikeTaskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+        $taskDetails.appendChild($strikeTaskDetails);
+
+        $editButton.hidden = true;
+        $doneButton.hidden = true;
+    }
+    else{
+        $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+    }
     
     $inputField.value = `${task.title}`;
     $inputField.hidden = true;
@@ -131,4 +141,21 @@ const createTaskElement = (task) => {
     return $taskElement;
 };
 
+const searchTaskHandler = () => {
+    const searchedTask = sanitizeInput($searchInput.value).toLowerCase();
+    const searchedTasks = taskList.filter((task) =>
+        task.title.toLowerCase().includes(searchedTask)
+    );
+
+    renderTasks(searchedTasks);
+}
+
+const renderTasks = (tasks) => {
+    $taskContainer.innerHTML = "";
+    tasks.forEach((task) => {
+        $taskContainer.appendChild(createTaskElement(task));
+    });
+};
+
 $addButton.addEventListener("click", addTaskHandler);
+$searchButton.addEventListener("click", searchTaskHandler);
