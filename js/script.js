@@ -19,8 +19,8 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    const taskElement = createTaskElement(task);
-    $taskContainer.prepend(taskElement);
+    const $taskElement = createTaskElement(task);
+    $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
@@ -32,15 +32,15 @@ const createTask = (taskTitle) => {
 };
 
 const deleteTaskHandler = (event) => {
-    const taskElement = event.target.parentElement;
-    const taskId = taskElement.id;
+    const $taskElement = event.target.parentElement;
+    const taskId = $taskElement.id;
 
-    taskElement.remove();
+    $taskElement.remove();
     taskList = taskList.filter((task) => task.id!=taskId);
 };
 
-const saveTaskEditHandler = (task, taskDetails, inputField, editButton, saveButton, cancelButton) => {
-    task.title = inputField.value;
+const saveTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $saveButton, $cancelButton) => {
+    task.title = $inputField.value;
     
     taskList.map((t) => {
         if(t.id==task.id){
@@ -49,60 +49,60 @@ const saveTaskEditHandler = (task, taskDetails, inputField, editButton, saveButt
         return t;
     });
 
-    taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+    $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
 
-    toggleElements(taskDetails, inputField, editButton, saveButton, cancelButton);
+    toggleElements($taskDetails, $inputField, $editButton, $saveButton, $cancelButton);
 }
 
-const toggleElements = (taskDetails, inputField, editButton, saveButton, cancelButton) => {
-    taskDetails.hidden = !taskDetails.hidden;
-    editButton.hidden = !editButton.hidden;
-    inputField.hidden = !inputField.hidden;
-    saveButton.hidden = !saveButton.hidden;
-    cancelButton.hidden = !cancelButton.hidden;
+const toggleElements = ($taskDetails, $inputField, $editButton, $saveButton, $cancelButton) => {
+    $taskDetails.hidden = !$taskDetails.hidden;
+    $editButton.hidden = !$editButton.hidden;
+    $inputField.hidden = !$inputField.hidden;
+    $saveButton.hidden = !$saveButton.hidden;
+    $cancelButton.hidden = !$cancelButton.hidden;
 }
 
 const createTaskElement = (task) => {
-    const taskElement = document.createElement("li");
-    const inputField = document.createElement("input");
-    const taskDetails = document.createElement("span");
-    const deleteButton = document.createElement("button");
-    const editButton = document.createElement("button");
-    const saveButton = document.createElement("button");
-    const cancelButton = document.createElement("button");
+    const $taskElement = document.createElement("li");
+    const $inputField = document.createElement("input");
+    const $taskDetails = document.createElement("span");
+    const $deleteButton = document.createElement("button");
+    const $editButton = document.createElement("button");
+    const $saveButton = document.createElement("button");
+    const $cancelButton = document.createElement("button");
 
-    taskElement.id = task.id;
+    $taskElement.id = task.id;
     
-    taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+    $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
     
-    inputField.value = `${task.title}`;
-    inputField.hidden = true;
+    $inputField.value = `${task.title}`;
+    $inputField.hidden = true;
     
-    deleteButton.innerText = "Delete";
-    deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
+    $deleteButton.innerText = "Delete";
+    $deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
     
-    editButton.innerHTML = "Edit";
-    editButton.addEventListener("click", () => toggleElements(taskDetails, inputField, editButton, saveButton, cancelButton));
+    $editButton.innerHTML = "Edit";
+    $editButton.addEventListener("click", () => toggleElements($taskDetails, $inputField, $editButton, $saveButton, $cancelButton));
     
-    saveButton.innerHTML = "Save";
-    saveButton.addEventListener("click", () => saveTaskEditHandler(task, taskDetails, inputField, editButton, saveButton, cancelButton));
-    saveButton.hidden = true;
+    $saveButton.innerHTML = "Save";
+    $saveButton.addEventListener("click", () => saveTaskEditHandler(task, $taskDetails, $inputField, $editButton, $saveButton, $cancelButton));
+    $saveButton.hidden = true;
     
-    cancelButton.innerHTML = "Cancel";
-    cancelButton.addEventListener("click", () => {
-        inputField.value = task.title;
-        toggleElements(taskDetails, inputField, editButton, saveButton, cancelButton);
+    $cancelButton.innerHTML = "Cancel";
+    $cancelButton.addEventListener("click", () => {
+        $inputField.value = task.title;
+        toggleElements($taskDetails, $inputField, $editButton, $saveButton, $cancelButton);
     });
-    cancelButton.hidden = true;
+    $cancelButton.hidden = true;
 
-    taskElement.appendChild(taskDetails);
-    taskElement.appendChild(inputField);
-    taskElement.appendChild(deleteButton);
-    taskElement.appendChild(editButton);
-    taskElement.appendChild(saveButton);
-    taskElement.appendChild(cancelButton);
+    $taskElement.appendChild($taskDetails);
+    $taskElement.appendChild($inputField);
+    $taskElement.appendChild($deleteButton);
+    $taskElement.appendChild($editButton);
+    $taskElement.appendChild($saveButton);
+    $taskElement.appendChild($cancelButton);
 
-    return taskElement;
+    return $taskElement;
 };
 
 $addButton.addEventListener("click", addTaskHandler);
