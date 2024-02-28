@@ -19,8 +19,8 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    const taskElement = createTaskElement(task);
-    $taskContainer.prepend(taskElement);
+    const $taskElement = createTaskElement(task);
+    $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
@@ -32,10 +32,10 @@ const createTask = (taskTitle) => {
 };
 
 const createTaskElement = (task) => {
-    const taskElement = document.createElement("li");
-    taskElement.innerHTML = `${task.title}, ${task.createdAt}`;
+    const $taskElement = document.createElement("li");
+    $taskElement.innerHTML = `${task.title}, ${task.createdAt}`;
 
-    return taskElement;
+    return $taskElement;
 };
 
 $addButton.addEventListener("click", addTaskHandler);
