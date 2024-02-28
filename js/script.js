@@ -27,7 +27,8 @@ const createTask = (taskTitle) => {
     return {
         "id": Date.now(),
         "title": taskTitle,
-        "createdAt": new Date().toLocaleDateString()
+        "createdAt": new Date().toLocaleDateString(),
+        "isDone": false
     }
 };
 
@@ -62,6 +63,25 @@ const toggleElements = ($taskDetails, $inputField, $editButton, $updateButton, $
     $cancelButton.hidden = !$cancelButton.hidden;
 }
 
+const markDoneTaskHandler = (event, task, $taskDetails, $editButton) => {
+    const $strikeTaskDetails = document.createElement("s");
+    $strikeTaskDetails.innerHTML = $taskDetails.innerHTML;
+    $taskDetails.innerHTML = "";
+    $taskDetails.appendChild($strikeTaskDetails);
+
+    $editButton.hidden = true;
+
+    task.isDone = true;
+    taskList = taskList.map((t) => {
+        if(t==task){
+            return task;
+        }
+        return t;
+    });
+
+    event.target.remove();
+}
+
 const createTaskElement = (task) => {
     const $taskElement = document.createElement("li");
     const $inputField = document.createElement("input");
@@ -70,6 +90,7 @@ const createTaskElement = (task) => {
     const $editButton = document.createElement("button");
     const $updateButton = document.createElement("button");
     const $cancelButton = document.createElement("button");
+    const $doneButton = document.createElement("button");
 
     $taskElement.id = task.id;
     
@@ -95,12 +116,16 @@ const createTaskElement = (task) => {
     });
     $cancelButton.hidden = true;
 
+    $doneButton.innerHTML = "Done";
+    $doneButton.addEventListener("click", (event) => markDoneTaskHandler(event, task, $taskDetails, $editButton));
+
     $taskElement.appendChild($taskDetails);
     $taskElement.appendChild($inputField);
     $taskElement.appendChild($deleteButton);
     $taskElement.appendChild($editButton);
     $taskElement.appendChild($updateButton);
     $taskElement.appendChild($cancelButton);
+    $taskElement.appendChild($doneButton);
 
     return $taskElement;
 };
