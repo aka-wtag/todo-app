@@ -19,8 +19,8 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    const taskElement = createTaskElement(task);
-    $taskContainer.prepend(taskElement);
+    const $taskElement = createTaskElement(task);
+    $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
@@ -32,25 +32,25 @@ const createTask = (taskTitle) => {
 };
 
 const deleteTaskHandler = (event) => {
-    const taskElement = event.target.parentElement;
-    const taskId = taskElement.id;
+    const $taskElement = event.target.parentElement;
+    const taskId = $taskElement.id;
 
-    taskElement.remove();
+    $taskElement.remove();
     taskList = taskList.filter((task) => task.id!=taskId);
 };
 
 const createTaskElement = (task) => {
-    const taskElement = document.createElement("li");
-    const deleteButton = document.createElement("button");
+    const $taskElement = document.createElement("li");
+    const $deleteButton = document.createElement("button");
 
-    deleteButton.innerText = "Delete";
-    deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
+    $deleteButton.innerText = "Delete";
+    $deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
 
-    taskElement.id = task.id;
-    taskElement.innerHTML = `${task.title}, ${task.createdAt} `;
-    taskElement.appendChild(deleteButton);
+    $taskElement.id = task.id;
+    $taskElement.innerHTML = `${task.title}, ${task.createdAt} `;
+    $taskElement.appendChild($deleteButton);
 
-    return taskElement;
+    return $taskElement;
 };
 
 $addButton.addEventListener("click", addTaskHandler);
