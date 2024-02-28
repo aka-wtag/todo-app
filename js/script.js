@@ -40,7 +40,7 @@ const deleteTaskHandler = (event) => {
     taskList = taskList.filter((task) => task.id!=taskId);
 };
 
-const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
+const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton) => {
     task.title = $inputField.value;
     
     taskList.map((t) => {
@@ -52,15 +52,16 @@ const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $up
 
     $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
 
-    toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton);
+    toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton);
 }
 
-const toggleElements = ($taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
+const toggleElements = ($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton) => {
     $taskDetails.hidden = !$taskDetails.hidden;
     $editButton.hidden = !$editButton.hidden;
     $inputField.hidden = !$inputField.hidden;
     $updateButton.hidden = !$updateButton.hidden;
     $cancelButton.hidden = !$cancelButton.hidden;
+    $doneButton.hidden = !$doneButton.hidden;
 }
 
 const markDoneTaskHandler = (event, task, $taskDetails, $editButton) => {
@@ -103,16 +104,16 @@ const createTaskElement = (task) => {
     $deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
     
     $editButton.innerHTML = "Edit";
-    $editButton.addEventListener("click", () => toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton));
+    $editButton.addEventListener("click", () => toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton));
     
     $updateButton.innerHTML = "Update";
-    $updateButton.addEventListener("click", () => updateTaskEditHandler(task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton));
+    $updateButton.addEventListener("click", () => updateTaskEditHandler(task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton));
     $updateButton.hidden = true;
     
     $cancelButton.innerHTML = "Cancel";
     $cancelButton.addEventListener("click", () => {
         $inputField.value = task.title;
-        toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton);
+        toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton);
     });
     $cancelButton.hidden = true;
 
