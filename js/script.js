@@ -6,7 +6,7 @@ let taskList = [];
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
     
-    if (!taskTitle.length) {
+    if (!taskTitle) {
         $errorMessage.hidden = false;
         $errorMessage.innerHTML = "Task Name must be provided";
         return;
