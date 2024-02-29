@@ -1,5 +1,5 @@
 import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
-import { sanitizeInput } from "./utility.js";
+import { sanitizeInput, showErrorMessage} from "./utility.js";
 
 let taskList = [];
 
@@ -7,8 +7,7 @@ const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
     
     if (!taskTitle) {
-        $errorMessage.hidden = false;
-        $errorMessage.innerHTML = "Task Name must be provided";
+        showErrorMessage("Task Title must be provided");
         return;
     }
     $errorMessage.hidden = true;
@@ -38,14 +37,14 @@ const deleteTaskHandler = (event) => {
 };
 
 const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
-    task.title = $inputField.value;
+    const taskTitle = sanitizeInput($inputField.value);
     
-    taskList.map((t) => {
-        if(t.id==task.id){
-            return task;
-        }
-        return t;
-    });
+    if (!taskTitle) {
+        showErrorMessage("Task Title must be provided for edit");
+        return;
+    }
+    task.title = taskTitle;
+    $errorMessage.hidden = true;
 
     $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
 
