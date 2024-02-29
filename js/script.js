@@ -30,8 +30,8 @@ const createTask = (taskTitle) => {
 };
 
 const deleteTaskHandler = (event) => {
-    const taskElement = event.target.parentElement;
-    const taskId = taskElement.id;
+    const $taskElement = event.target.parentElement;
+    const taskId = parseInt($taskElement.id);
 
     taskElement.remove();
     taskList = taskList.filter((task) => task.id!=taskId);
