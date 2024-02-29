@@ -6,14 +6,12 @@ let taskList = [];
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
     
-    if (!taskTitle.length) {
+    if (!taskTitle) {
         $errorMessage.hidden = false;
         $errorMessage.innerHTML = "Task Name must be provided";
         return;
     }
-    else{
-        $errorMessage.hidden = true;
-    }
+    $errorMessage.hidden = true;
 
     const task = createTask(taskTitle);
 
@@ -34,7 +32,7 @@ const createTask = (taskTitle) => {
 
 const deleteTaskHandler = (event) => {
     const $taskElement = event.target.parentElement;
-    const taskId = $taskElement.id;
+    const taskId = parseInt($taskElement.id);
 
     $taskElement.remove();
     taskList = taskList.filter((task) => task.id!=taskId);
