@@ -1,0 +1,29 @@
+.flex{
+    display: flex;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
+
+/* input,
+button,
+textarea {
+    outline: none;
+} */
+
+.container {
+    /* width: 100%; */
+    /* max-width: 87.5rem; */
+    margin: 0 9.375rem;
+    /* padding: 0 1.56rem; */
+}
