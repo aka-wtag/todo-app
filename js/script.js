@@ -17,8 +17,8 @@ const addTaskHandler = () => {
 
     taskList.unshift(task);
 
-    const taskElement = createTaskElement(task);
-    $taskContainer.prepend(taskElement);
+    const $taskElement = createTaskElement(task);
+    $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
@@ -31,10 +31,10 @@ const createTask = (taskTitle) => {
 };
 
 const deleteTaskHandler = (event) => {
-    const taskElement = event.target.parentElement;
-    const taskId = taskElement.id;
+    const $taskElement = event.target.parentElement;
+    const taskId = parseInt($taskElement.id);
 
-    taskElement.remove();
+    $taskElement.remove();
     taskList = taskList.filter((task) => task.id!=taskId);
 };
 
