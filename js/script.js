@@ -11,9 +11,7 @@ const addTaskHandler = () => {
         $errorMessage.innerHTML = "Task Name must be provided";
         return;
     }
-    else{
-        $errorMessage.hidden = true;
-    }
+    $errorMessage.hidden = true;
 
     const task = createTask(taskTitle);
 
