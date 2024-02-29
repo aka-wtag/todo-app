@@ -34,7 +34,7 @@ const deleteTaskHandler = (event) => {
     const taskId = parseInt($taskElement.id);
 
     $taskElement.remove();
-    taskList = taskList.filter((task) => task.id!=taskId);
+    taskList = taskList.filter((task) => task.id!==taskId);
 };
 
 const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
