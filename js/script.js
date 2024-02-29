@@ -1,8 +1,6 @@
 import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
 import { sanitizeInput } from "./utility.js";
 
-const reg = /[&<>"'/`]/ig;
-
 let taskList = [];
 
 const addTaskHandler = () => {
