@@ -1,5 +1,8 @@
-import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
-import { sanitizeInput } from "./utility.js";
+const taskInput = document.getElementById("input-task");
+const addButton = document.getElementById("add-task");
+const taskContainer = document.getElementById("task-container");
+
+const reg = /[&<>"'/`]/ig;
 
 let taskList = [];
 
