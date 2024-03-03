@@ -28,15 +28,17 @@ const createTask = (taskTitle) => {
         id: Date.now(),
         title: taskTitle,
         createdAt: new Date().toLocaleDateString()
-    }
+    };
 };
 
 const deleteTaskHandler = (event) => {
     const $taskElement = event.target.parentElement;
+    
     const taskId = parseInt($taskElement.id);
 
     $taskElement.remove();
-    taskList = taskList.filter((task) => task.id!==taskId);
+
+    tasks = tasks.filter((task) => task.id!==taskId);
 };
 
 const createTaskElement = (task) => {
