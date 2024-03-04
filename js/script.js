@@ -40,7 +40,7 @@ const deleteTaskHandler = (event) => {
     tasks = tasks.filter((task) => task.id !== taskId);
 };
 
-const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
+const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton) => {
     const taskTitle = sanitizeInput($inputField.value);
     
     if (!taskTitle) {
