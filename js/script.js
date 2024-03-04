@@ -1,7 +1,7 @@
 import { $taskInput, $taskContainer, $addButton, $errorMessage} from "./element.js";
 import { sanitizeInput, showErrorMessage} from "./utility.js";
 
-let taskList = [];
+let tasks = [];
 
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
@@ -14,26 +14,29 @@ const addTaskHandler = () => {
 
     const task = createTask(taskTitle);
 
-    taskList.unshift(task);
+    tasks.unshift(task);
 
     const $taskElement = createTaskElement(task);
+
     $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
     return {
-        "id": Date.now(),
-        "title": taskTitle,
-        "createdAt": new Date().toLocaleDateString()
-    }
+        id: Date.now(),
+        title: taskTitle,
+        createdAt: new Date().toLocaleDateString()
+    };
 };
 
 const deleteTaskHandler = (event) => {
     const $taskElement = event.target.parentElement;
+    
     const taskId = parseInt($taskElement.id);
 
     $taskElement.remove();
-    taskList = taskList.filter((task) => task.id!==taskId);
+
+    tasks = tasks.filter((task) => task.id !== taskId);
 };
 
 const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton) => {
