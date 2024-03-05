@@ -15,6 +15,7 @@ const addTaskHandler = () => {
 
     if (!taskTitle) {
         showErrorMessage("Task Title must be provided");
+
         return;
     }
     $errorMessage.hidden = true;
@@ -60,9 +61,11 @@ const updateTaskEditHandler = (
 
     if (!taskTitle) {
         showErrorMessage("Task Title must be provided for edit");
+
         return;
     }
     task.title = taskTitle;
+
     $errorMessage.hidden = true;
 
     $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
@@ -122,6 +125,7 @@ const createTaskElement = (task) => {
     if (task.isDone) {
         const $strikeTaskDetails = document.createElement("s");
         $strikeTaskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
+
         $taskDetails.appendChild($strikeTaskDetails);
 
         $editButton.hidden = true;
