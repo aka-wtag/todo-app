@@ -77,6 +77,6 @@ textarea {
 }
 
 .button-active {
-    background: var(--var-violet-color-v3);
-    color: var(--var-white-color);
+    color: var(--var-black-color);
+    pointer-events: all;
 }

@@ -11,6 +11,9 @@ import {
     $splashScreen,
     $header,
     $main,
+    $allFilter,
+    $incompleteFilter,
+    $completedFilter,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -44,6 +47,10 @@ const addTaskHandler = () => {
 
     clearInputField($taskInput);
     clearInputField($searchInput);
+
+    if (tasks.length == 1) {
+        toggleFilterElements();
+    }
 };
 
 const createTask = (taskTitle) => {
@@ -64,6 +71,10 @@ const deleteTaskHandler = (event) => {
     $taskElement.remove();
 
     tasks = tasks.filter((task) => task.id != taskId);
+
+    if (tasks.length == 0) {
+        toggleFilterElements();
+    }
 };
 
 const updateTaskEditHandler = (
@@ -116,6 +127,15 @@ const toggleElements = (
     $saveButton.hidden = !$saveButton.hidden;
     $cancelButton.hidden = !$cancelButton.hidden;
     $deleteButton.hidden = !$deleteButton.hidden;
+};
+
+const toggleFilterElements = () => {
+    $allFilter.classList.toggle("button-inactive");
+    $allFilter.classList.toggle("button-active");
+    $incompleteFilter.classList.toggle("button-inactive");
+    $incompleteFilter.classList.toggle("button-active");
+    $completedFilter.classList.toggle("button-inactive");
+    $completedFilter.classList.toggle("button-active");
 };
 
 const markDoneTaskHandler = (
@@ -329,4 +349,24 @@ document.addEventListener("DOMContentLoaded", () => {
         $header.classList.remove("hide");
         $main.classList.remove("hide");
     }, 2000);
+});
+
+$allFilter.addEventListener("click", () => {
+    clearInputField($searchInput);
+
+    renderTasks(tasks);
+});
+$incompleteFilter.addEventListener("click", () => {
+    clearInputField($searchInput);
+
+    const incompleteTasks = tasks.filter((task) => !task.isDone);
+
+    renderTasks(incompleteTasks);
+});
+$completedFilter.addEventListener("click", () => {
+    clearInputField($searchInput);
+
+    const completedTasks = tasks.filter((task) => task.isDone);
+
+    renderTasks(completedTasks);
 });
