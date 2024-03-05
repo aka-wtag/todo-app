@@ -1,85 +1,111 @@
-import { $taskInput, $taskContainer, $addButton, $errorMessage, $searchButton, $searchInput} from "./element.js";
-import { sanitizeInput } from "./utility.js";
+import {
+    $taskInput,
+    $taskContainer,
+    $addButton,
+    $errorMessage,
+    $searchButton,
+    $searchInput,
+} from "./element.js";
+import { sanitizeInput, showErrorMessage } from "./utility.js";
 
-let taskList = [];
+let tasks = [];
 
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
-    
+
     if (!taskTitle) {
-        $errorMessage.hidden = false;
-        $errorMessage.innerHTML = "Task Name must be provided";
+        showErrorMessage("Task Title must be provided");
         return;
     }
     $errorMessage.hidden = true;
 
     const task = createTask(taskTitle);
 
-    taskList.unshift(task);
+    tasks.unshift(task);
 
     const $taskElement = createTaskElement(task);
+
     $taskContainer.prepend($taskElement);
 };
 
 const createTask = (taskTitle) => {
     return {
-        "id": Date.now(),
-        "title": taskTitle,
-        "createdAt": new Date().toLocaleDateString(),
-        "isDone": false
-    }
+        id: Date.now(),
+        title: taskTitle,
+        createdAt: new Date().toLocaleDateString(),
+        isDone: false,
+    };
 };
 
 const deleteTaskHandler = (event) => {
     const $taskElement = event.target.parentElement;
+
     const taskId = parseInt($taskElement.id);
 
     $taskElement.remove();
-    taskList = taskList.filter((task) => task.id!=taskId);
+
+    tasks = tasks.filter((task) => task.id !== taskId);
 };
 
-const updateTaskEditHandler = (task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton) => {
-    task.title = $inputField.value;
-    
-    taskList.map((t) => {
-        if(t.id==task.id){
-            return task;
-        }
-        return t;
-    });
+const updateTaskEditHandler = (
+    task,
+    $taskDetails,
+    $inputField,
+    $editButton,
+    $updateButton,
+    $cancelButton,
+    $doneButton
+) => {
+    const taskTitle = sanitizeInput($inputField.value);
+
+    if (!taskTitle) {
+        showErrorMessage("Task Title must be provided for edit");
+        return;
+    }
+    task.title = taskTitle;
+    $errorMessage.hidden = true;
 
     $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
 
-    toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton);
-}
+    toggleElements(
+        $taskDetails,
+        $inputField,
+        $editButton,
+        $updateButton,
+        $cancelButton,
+        $doneButton
+    );
+};
 
-const toggleElements = ($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton) => {
+const toggleElements = (
+    $taskDetails,
+    $inputField,
+    $editButton,
+    $updateButton,
+    $cancelButton,
+    $doneButton
+) => {
     $taskDetails.hidden = !$taskDetails.hidden;
     $editButton.hidden = !$editButton.hidden;
     $inputField.hidden = !$inputField.hidden;
     $updateButton.hidden = !$updateButton.hidden;
     $cancelButton.hidden = !$cancelButton.hidden;
     $doneButton.hidden = !$doneButton.hidden;
-}
+};
 
 const markDoneTaskHandler = (event, task, $taskDetails, $editButton) => {
     const $strikeTaskDetails = document.createElement("s");
     $strikeTaskDetails.innerHTML = $taskDetails.innerHTML;
+
     $taskDetails.innerHTML = "";
     $taskDetails.appendChild($strikeTaskDetails);
 
     $editButton.hidden = true;
 
     task.isDone = true;
-    taskList = taskList.map((t) => {
-        if(t==task){
-            return task;
-        }
-        return t;
-    });
 
     event.target.remove();
-}
+};
 
 const createTaskElement = (task) => {
     const $taskElement = document.createElement("li");
@@ -92,41 +118,70 @@ const createTaskElement = (task) => {
     const $doneButton = document.createElement("button");
 
     $taskElement.id = task.id;
-    
-    if(task.isDone){
+
+    if (task.isDone) {
         const $strikeTaskDetails = document.createElement("s");
         $strikeTaskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
         $taskDetails.appendChild($strikeTaskDetails);
 
         $editButton.hidden = true;
         $doneButton.hidden = true;
-    }
-    else{
+    } else {
         $taskDetails.innerHTML = `${task.title}, ${task.createdAt} `;
     }
-    
+
     $inputField.value = `${task.title}`;
     $inputField.hidden = true;
-    
+
     $deleteButton.innerText = "Delete";
-    $deleteButton.addEventListener("click", (event) => deleteTaskHandler(event));
-    
+    $deleteButton.addEventListener("click", (event) =>
+        deleteTaskHandler(event)
+    );
+
     $editButton.innerHTML = "Edit";
-    $editButton.addEventListener("click", () => toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton));
-    
+    $editButton.addEventListener("click", () =>
+        toggleElements(
+            $taskDetails,
+            $inputField,
+            $editButton,
+            $updateButton,
+            $cancelButton,
+            $doneButton
+        )
+    );
+
     $updateButton.innerHTML = "Update";
-    $updateButton.addEventListener("click", () => updateTaskEditHandler(task, $taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton));
+    $updateButton.addEventListener("click", () =>
+        updateTaskEditHandler(
+            task,
+            $taskDetails,
+            $inputField,
+            $editButton,
+            $updateButton,
+            $cancelButton,
+            $doneButton
+        )
+    );
     $updateButton.hidden = true;
-    
+
     $cancelButton.innerHTML = "Cancel";
     $cancelButton.addEventListener("click", () => {
         $inputField.value = task.title;
-        toggleElements($taskDetails, $inputField, $editButton, $updateButton, $cancelButton, $doneButton);
+        toggleElements(
+            $taskDetails,
+            $inputField,
+            $editButton,
+            $updateButton,
+            $cancelButton,
+            $doneButton
+        );
     });
     $cancelButton.hidden = true;
 
     $doneButton.innerHTML = "Done";
-    $doneButton.addEventListener("click", (event) => markDoneTaskHandler(event, task, $taskDetails, $editButton));
+    $doneButton.addEventListener("click", (event) =>
+        markDoneTaskHandler(event, task, $taskDetails, $editButton)
+    );
 
     $taskElement.appendChild($taskDetails);
     $taskElement.appendChild($inputField);
@@ -141,12 +196,12 @@ const createTaskElement = (task) => {
 
 const searchTaskHandler = () => {
     const searchedTask = sanitizeInput($searchInput.value).toLowerCase();
-    const searchedTasks = taskList.filter((task) =>
+    const searchedTasks = tasks.filter((task) =>
         task.title.toLowerCase().includes(searchedTask)
     );
 
     renderTasks(searchedTasks);
-}
+};
 
 const renderTasks = (tasks) => {
     $taskContainer.innerHTML = "";
