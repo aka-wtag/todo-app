@@ -1,0 +1,82 @@
+.container {
+    width: 100%;
+    max-width: 87.5rem;
+    margin: auto;
+    padding: 0 1.56rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+h1,
+h3,
+p {
+    font-weight: 700;
+}
+
+input,
+button,
+textarea {
+    outline: none;
+}
+
+.button,
+.button-icon,
+.button-primary,
+.button-secondary,
+.button-ternary {
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 0.3rem;
+}
+
+.button-icon {
+    background: var(--var-white-color);
+    color: var(--var-gray-color);
+    border: none;
+}
+
+.button-primary {
+    padding: 0.56rem 1.06rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--var-white-color);
+    background: var(--var-violet-color-v3);
+    border: none;
+}
+
+.button-secondary {
+    background: var(--var-white-color);
+    border: 0.06rem solid var(--var-violet-color-v1);
+    color: var(--var-black-color);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.56rem 0.81rem;
+}
+
+.button-ternary {
+    background: var(--var-black-color);
+    border: none;
+    color: var(--var-white-color);
+    font-size: 1rem;
+    padding: 0.56rem 1.25rem;
+}
+
+.button-inactive {
+    color: var(--var-gray-color);
+    pointer-events: none;
+}
+
+.button-active {
+    background: var(--var-violet-color-v3);
+    color: var(--var-white-color);
+}

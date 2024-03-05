@@ -1,22 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
-</head>
-<body>
-    <input type="text" id="search-input">
-    <button id="search-button">Search</button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Todo App</title>
+        <link rel="stylesheet" href="./css/style.css" />
+    </head>
+    <body>
+        <header class="flex align-items-center">
+            <div class="container flex flex-between">
+                <div class="flex align-items-center logo">
+                    <img
+                        class="logo-image"
+                        src="./assets/leaf.png"
+                        alt="Logo"
+                    />
+                    <h1 class="logo-text">Todos</h1>
+                </div>
+                <div class="flex align-items-center search-wrapper">
+                    <input class="search-input" type="text" id="search-input" />
+                    <button class="flex button-icon" id="search-button">
+                        <img src="./assets/search-icon.svg" alt="Search Icon" />
+                    </button>
+                </div>
+            </div>
+        </header>
 
-    <h1>Add Tasks</h1>
+        <main class="container">
+            <section class="taskbar">
+                <h1 class="taskbar-title">Add Tasks</h1>
+                <div
+                    class="flex align-items-center flex-between taskbar-button-wrapper"
+                >
+                    <button
+                        class="flex align-items-center button-primary taskbar-add-button"
+                        type="button"
+                        id="create-button"
+                    >
+                        <img
+                            class="taskbar-button-icon"
+                            src="./assets/plus-icon.png"
+                            alt="create a new task"
+                        />
+                        <span>Create</span>
+                    </button>
 
-    <input type="text" id="input-task">
-    <button id="add-task">Add</button>
-    <div id="error-message" hidden>Error</div>
+                    <div class="flex filter-button-wrapper">
+                        <button
+                            class="button-secondary button-inactive"
+                            id="all-filter-button"
+                        >
+                            All
+                        </button>
+                        <button
+                            class="button-secondary button-inactive"
+                            id="incomplete-filter-button"
+                        >
+                            Incomplete
+                        </button>
+                        <button
+                            class="button-secondary button-inactive"
+                            id="complete-filter-button"
+                        >
+                            Complete
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-    <ul id="task-container"></ul>
+            <section class="task-panel" id="task-list">
+                <div class="task hide" id="input-wrapper">
+                    <textarea
+                        class="task-input"
+                        id="input-task"
+                        rows="3"
+                    ></textarea>
+                    <div class="flex task-button-wrapper">
+                        <button class="button-secondary" id="add-button">
+                            Add Task
+                        </button>
+                        <button
+                            class="button-icon task_button"
+                            id="clear-button"
+                        >
+                            <img
+                                class="task-button-icon"
+                                src="./assets/delete-icon.svg"
+                                alt="delete task"
+                            />
+                        </button>
+                    </div>
+                </div>
 
-    <script type="module" src="./js/script.js"></script>
-</body>
+                <div class="task-blank" id="blank-field-wrapper">
+                    <div class="task-blank-image">
+                        <img
+                            class="blank-image"
+                            src="./assets/blank-image.png"
+                            alt="blank file"
+                        />
+                    </div>
+                    <p class="task-title-blank">
+                        You didn’t add any task. Please add one.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <button class="button-ternary load-more-button hide">Load More</button>
+
+        <p class="flex hide" id="message"></p>
+
+        <script type="module" src="./js/script.js"></script>
+    </body>
 </html>
