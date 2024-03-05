@@ -11,3 +11,6 @@ export const $taskInput = document.getElementById("input-task");
 export const $taskList = document.getElementById("task-list");
 export const $messageElement = document.getElementById("message");
 export const $clearButton = document.getElementById("clear-button");
+export const $splashScreen = document.getElementById("splash-screen");
+export const $header = document.querySelector("header");
+export const $main = document.querySelector("main");

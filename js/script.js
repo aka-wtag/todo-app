@@ -8,6 +8,9 @@ import {
     $blankFieldWrapper,
     $taskList,
     $clearButton,
+    $splashScreen,
+    $header,
+    $main,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -318,3 +321,12 @@ $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
 $searchButton.addEventListener("click", searchTaskHandler);
 $clearButton.addEventListener("click", () => clearInputField($taskInput));
+
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(function () {
+        $splashScreen.style.display = "none";
+
+        $header.classList.remove("hide");
+        $main.classList.remove("hide");
+    }, 2000);
+});
