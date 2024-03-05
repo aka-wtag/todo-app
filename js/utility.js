@@ -1,4 +1,4 @@
-const reg = /[&<>"'/`]/ig;
+const reg = /[&<>"'/`]/gi;
 import { $errorMessage } from "./element.js";
 
 export const sanitizeInput = (value) => {
