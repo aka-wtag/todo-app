@@ -210,7 +210,8 @@ const searchTaskHandler = () => {
 const renderTasks = (tasks) => {
     $taskContainer.innerHTML = "";
     tasks.forEach((task) => {
-        $taskContainer.appendChild(createTaskElement(task));
+        const $taskElement = createTaskElement(task);
+        $taskContainer.appendChild($taskElement);
     });
 };
 
