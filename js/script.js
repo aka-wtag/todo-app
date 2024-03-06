@@ -126,6 +126,7 @@ const markDoneTaskHandler = (
     $taskTitleElement,
     $editButton,
     $doneButton,
+    $saveButton,
     $completdBadgeElement
 ) => {
     task.isDone = true;
@@ -134,6 +135,10 @@ const markDoneTaskHandler = (
     event.currentTarget.remove();
 
     $taskTitleElement.classList.add("task-title-completed");
+
+    if (!$saveButton.hidden) {
+        $saveButton.click();
+    }
 
     $editButton.hidden = true;
     $doneButton.hidden = true;
@@ -252,6 +257,7 @@ const createTaskElement = (task) => {
             $taskTitleElement,
             $editButton,
             $doneButton,
+            $saveButton,
             $completdBadgeElement
         )
     );
