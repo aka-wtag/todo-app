@@ -44,6 +44,8 @@ const addTaskHandler = () => {
 
     clearInputField($taskInput);
     clearInputField($searchInput);
+
+    showMessage(true, "Task added successfully.");
 };
 
 const createTask = (taskTitle) => {
