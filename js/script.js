@@ -26,6 +26,8 @@ import { DELETE_ICON, EDIT_ICON, DONE_ICON, PLUS_ICON } from "./svg.js";
 
 let tasks = [];
 
+let filterBy;
+
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
 
@@ -338,6 +340,22 @@ const showInputWrapper = () => {
     $inputWrapper.classList.toggle("hide");
 };
 
+const handleFilteredTasks = () => {
+    clearInputField($searchInput);
+
+    let filteredTasks;
+
+    if (filterBy === "incomplete") {
+        filteredTasks = tasks.filter((task) => !task.isDone);
+    } else if (filterBy === "completed") {
+        filteredTasks = tasks.filter((task) => task.isDone);
+    } else {
+        filteredTasks = tasks;
+    }
+
+    renderTasks(filteredTasks);
+};
+
 $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
 $searchButton.addEventListener("click", searchTaskHandler);
@@ -353,21 +371,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 $allFilter.addEventListener("click", () => {
-    clearInputField($searchInput);
-
-    renderTasks(tasks);
+    filterBy = "all";
+    handleFilteredTasks();
 });
 $incompleteFilter.addEventListener("click", () => {
-    clearInputField($searchInput);
-
-    const incompleteTasks = tasks.filter((task) => !task.isDone);
-
-    renderTasks(incompleteTasks);
+    filterBy = "incomplete";
+    handleFilteredTasks();
 });
 $completedFilter.addEventListener("click", () => {
-    clearInputField($searchInput);
-
-    const completedTasks = tasks.filter((task) => task.isDone);
-
-    renderTasks(completedTasks);
+    filterBy = "completed";
+    handleFilteredTasks();
 });
