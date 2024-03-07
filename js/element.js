@@ -14,10 +14,10 @@ export const $clearButton = document.getElementById("clear-button");
 export const $splashScreen = document.getElementById("splash-screen");
 export const $header = document.querySelector("header");
 export const $main = document.querySelector("main");
-export const $allFilter = document.getElementById("all-filter-button");
-export const $incompleteFilter = document.getElementById(
+export const $allFilterButton = document.getElementById("all-filter-button");
+export const $incompleteFilterButton = document.getElementById(
     "incomplete-filter-button"
 );
-export const $completedFilter = document.getElementById(
+export const $completedFilterButton = document.getElementById(
     "complete-filter-button"
 );

@@ -11,9 +11,9 @@ import {
     $splashScreen,
     $header,
     $main,
-    $allFilter,
-    $incompleteFilter,
-    $completedFilter,
+    $allFilterButton,
+    $incompleteFilterButton,
+    $completedFilterButton,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -140,12 +140,12 @@ const toggleElements = (
 };
 
 const toggleFilterElements = () => {
-    $allFilter.classList.toggle("button-inactive");
-    $allFilter.classList.toggle("button-active");
-    $incompleteFilter.classList.toggle("button-inactive");
-    $incompleteFilter.classList.toggle("button-active");
-    $completedFilter.classList.toggle("button-inactive");
-    $completedFilter.classList.toggle("button-active");
+    $allFilterButton.classList.toggle("button-inactive");
+    $allFilterButton.classList.toggle("button-active");
+    $incompleteFilterButton.classList.toggle("button-inactive");
+    $incompleteFilterButton.classList.toggle("button-active");
+    $completedFilterButton.classList.toggle("button-inactive");
+    $completedFilterButton.classList.toggle("button-active");
 };
 
 const markDoneTaskHandler = (
@@ -312,15 +312,16 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
-    $searchInput.focus();
-
-    const searchedTask = sanitizeInput($searchInput.value).toLowerCase();
-
-    const searchedTasks = tasks.filter((task) =>
-        task.title.toLowerCase().includes(searchedTask)
-    );
+    const searchedTasks = searchTasks($searchInput.value);
 
     renderTasks(searchedTasks);
+};
+
+const searchTasks = (searchInput) => {
+    const searchedTask = sanitizeInput(searchInput).toLowerCase();
+    return tasks.filter((task) =>
+        task.title.toLowerCase().includes(searchedTask)
+    );
 };
 
 const renderTasks = (tasks) => {
@@ -359,25 +360,36 @@ const showInputWrapper = () => {
 };
 
 const handleFilteredTasks = () => {
-    clearInputField($searchInput);
+    let filteredTasks = tasks;
 
-    let filteredTasks;
+    if ($searchInput.value !== "") {
+        filteredTasks = searchTasks($searchInput.value);
+    }
 
     if (filterBy === "incomplete") {
-        filteredTasks = tasks.filter((task) => !task.isDone);
+        filteredTasks = filteredTasks.filter((task) => !task.isDone);
     } else if (filterBy === "completed") {
-        filteredTasks = tasks.filter((task) => task.isDone);
-    } else {
-        filteredTasks = tasks;
+        filteredTasks = filteredTasks.filter((task) => task.isDone);
     }
 
     renderTasks(filteredTasks);
 };
 
+const handleSearchButton = () => {
+    $searchInput.value = "";
+    $searchInput.hidden = !$searchInput.hidden;
+    if (!$searchInput.hidden) {
+        $searchInput.focus();
+    } else {
+        renderTasks(tasks);
+    }
+};
+
 $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
 $blankFieldWrapper.addEventListener("click", showInputWrapper);
-$searchButton.addEventListener("click", searchTaskHandler);
+$searchButton.addEventListener("click", handleSearchButton);
+$searchInput.addEventListener("keyup", searchTaskHandler);
 $clearButton.addEventListener("click", () => clearInputField($taskInput));
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -389,15 +401,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
 });
 
-$allFilter.addEventListener("click", () => {
+$allFilterButton.addEventListener("click", () => {
     filterBy = "all";
     handleFilteredTasks();
 });
-$incompleteFilter.addEventListener("click", () => {
+$incompleteFilterButton.addEventListener("click", () => {
     filterBy = "incomplete";
     handleFilteredTasks();
 });
-$completedFilter.addEventListener("click", () => {
+$completedFilterButton.addEventListener("click", () => {
     filterBy = "completed";
     handleFilteredTasks();
 });
