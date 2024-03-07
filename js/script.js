@@ -19,7 +19,13 @@ import {
     clearInputField,
     showMessage,
 } from "./utility.js";
-import { DELETE_ICON, EDIT_ICON, DONE_ICON, PLUS_ICON } from "./svg.js";
+import {
+    DELETE_ICON,
+    EDIT_ICON,
+    DONE_ICON,
+    PLUS_ICON,
+    CANCEL_ICON,
+} from "./svg.js";
 
 let tasks = [];
 
@@ -197,7 +203,7 @@ const createTaskElement = (task) => {
     $editButton.innerHTML = EDIT_ICON;
     $saveButton.innerHTML = "Save";
     $doneButton.innerHTML = DONE_ICON;
-    $cancelButton.innerHTML = DELETE_ICON;
+    $cancelButton.innerHTML = CANCEL_ICON;
 
     if (task.isDone) {
         $taskTitleElement.classList.add("task-title-completed");
