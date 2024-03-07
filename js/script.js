@@ -135,16 +135,19 @@ const markDoneTaskHandler = (
     $saveButton,
     $completdBadgeElement
 ) => {
+    if (!$saveButton.hidden) {
+        $saveButton.click();
+        if ($editButton.hidden) {
+            return;
+        }
+    }
+
     task.isDone = true;
     task.doneAt = new Date().toLocaleDateString();
 
     event.currentTarget.remove();
 
     $taskTitleElement.classList.add("task-title-completed");
-
-    if (!$saveButton.hidden) {
-        $saveButton.click();
-    }
 
     $editButton.hidden = true;
     $doneButton.hidden = true;
@@ -287,6 +290,8 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
+    $searchInput.focus();
+
     const searchedTask = sanitizeInput($searchInput.value).toLowerCase();
 
     const searchedTasks = tasks.filter((task) =>
