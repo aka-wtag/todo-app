@@ -81,7 +81,6 @@ const deleteTaskHandler = (event) => {
     $taskElement.remove();
 
     tasks = tasks.filter((task) => task.id !== taskId);
-    tasks = tasks.filter((task) => task.id != taskId);
 
     if (tasks.length == 0) {
         toggleFilterElements();
