@@ -185,11 +185,6 @@ header {
     width: 100%;
 }
 
-.load-more-button {
-    display: block;
-    margin: 3.56rem auto;
-}
-
 .hide {
     display: none;
 }
