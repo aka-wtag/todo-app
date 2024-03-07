@@ -90,10 +90,6 @@ header {
     height: 1rem;
 }
 
-.filter-button-wrapper {
-    gap: 1.19rem;
-}
-
 .task-panel {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
