@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap);
-@import "./mystrap.css";
+@import "./common.css";
 
 :root {
     --var-black-color: #32394b;
@@ -12,6 +12,9 @@
     --var-violet-color-v1: #dde2ff;
     --var-violet-color-v2: #d1d8ff;
     --var-violet-color-v3: #7a8dfd;
+
+    --var-font-weight-500: 500;
+    --var-font-weight-700: 700;
 }
 
 *,
@@ -87,10 +90,6 @@ header {
     height: 1rem;
 }
 
-.filter-button-wrapper {
-    gap: 1.19rem;
-}
-
 .task-panel {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -137,7 +136,7 @@ header {
     border-radius: 0.31rem;
     color: var(--var-black-color);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: var(--var-font-weight-500);
     padding: 0.28rem 0.51rem;
     resize: none;
     width: 100%;

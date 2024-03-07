@@ -20,7 +20,7 @@
 h1,
 h3,
 p {
-    font-weight: 700;
+    font-weight: var(--var-font-weight-700);
 }
 
 input,
@@ -35,7 +35,7 @@ textarea {
 .button-secondary,
 .button-ternary {
     cursor: pointer;
-    font-weight: 500;
+    font-weight: var(--var-font-weight-500);
     border-radius: 0.3rem;
 }
 
@@ -48,7 +48,7 @@ textarea {
 .button-primary {
     padding: 0.56rem 1.06rem;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: var(--var-font-weight-500);
     color: var(--var-white-color);
     background: var(--var-violet-color-v3);
     border: none;
@@ -59,7 +59,7 @@ textarea {
     border: 0.06rem solid var(--var-violet-color-v1);
     color: var(--var-black-color);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: var(--var-font-weight-500);
     padding: 0.56rem 0.81rem;
 }
 

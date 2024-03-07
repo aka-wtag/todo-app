@@ -22,7 +22,13 @@ import {
     clearInputField,
     showMessage,
 } from "./utility.js";
-import { DELETE_ICON, EDIT_ICON, DONE_ICON, PLUS_ICON } from "./svg.js";
+import {
+    DELETE_ICON,
+    EDIT_ICON,
+    DONE_ICON,
+    PLUS_ICON,
+    CANCEL_ICON,
+} from "./svg.js";
 
 let tasks = [];
 
@@ -53,6 +59,8 @@ const addTaskHandler = () => {
     if (tasks.length == 1) {
         toggleFilterElements();
     }
+
+    showMessage(true, "Task added successfully.");
 };
 
 const createTask = (taskTitle) => {
@@ -147,8 +155,16 @@ const markDoneTaskHandler = (
     $taskTitleElement,
     $editButton,
     $doneButton,
+    $saveButton,
     $completdBadgeElement
 ) => {
+    if (!$saveButton.hidden) {
+        $saveButton.click();
+        if ($editButton.hidden) {
+            return;
+        }
+    }
+
     task.isDone = true;
     task.doneAt = new Date().toLocaleDateString();
 
@@ -213,7 +229,7 @@ const createTaskElement = (task) => {
     $editButton.innerHTML = EDIT_ICON;
     $saveButton.innerHTML = "Save";
     $doneButton.innerHTML = DONE_ICON;
-    $cancelButton.innerHTML = DELETE_ICON;
+    $cancelButton.innerHTML = CANCEL_ICON;
 
     if (task.isDone) {
         $taskTitleElement.classList.add("task-title-completed");
@@ -273,6 +289,7 @@ const createTaskElement = (task) => {
             $taskTitleElement,
             $editButton,
             $doneButton,
+            $saveButton,
             $completdBadgeElement
         )
     );
@@ -296,6 +313,8 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
+    $searchInput.focus();
+
     const searchedTask = sanitizeInput($searchInput.value).toLowerCase();
 
     const searchedTasks = tasks.filter((task) =>
@@ -358,6 +377,7 @@ const handleFilteredTasks = () => {
 
 $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
+$blankFieldWrapper.addEventListener("click", showInputWrapper);
 $searchButton.addEventListener("click", searchTaskHandler);
 $clearButton.addEventListener("click", () => clearInputField($taskInput));
 
