@@ -389,7 +389,7 @@ $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
 $blankFieldWrapper.addEventListener("click", showInputWrapper);
 $searchButton.addEventListener("click", handleSearchButton);
-$searchInput.addEventListener("keyup", searchTaskHandler);
+$searchInput.addEventListener("input", searchTaskHandler);
 $clearButton.addEventListener("click", () => clearInputField($taskInput));
 
 document.addEventListener("DOMContentLoaded", () => {
