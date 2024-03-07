@@ -327,6 +327,7 @@ const showInputWrapper = () => {
 
 $addButton.addEventListener("click", addTaskHandler);
 $createButton.addEventListener("click", showInputWrapper);
+$blankFieldWrapper.addEventListener("click", showInputWrapper);
 $searchButton.addEventListener("click", searchTaskHandler);
 $clearButton.addEventListener("click", () => clearInputField($taskInput));
 
