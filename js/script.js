@@ -14,6 +14,7 @@ import {
     $allFilterButton,
     $incompleteFilterButton,
     $completedFilterButton,
+    $paginationButton,
 } from "./element.js";
 import {
     sanitizeInput,
@@ -33,6 +34,14 @@ import {
 let tasks = [];
 
 let filterBy;
+let pageTasks = [];
+
+const START_INDEX = 0;
+const TASK_PER_PAGE = 9;
+let endIndex;
+let currentPage = 1;
+let totalPage = 1;
+let pageAdjustmentCount;
 
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
@@ -46,12 +55,7 @@ const addTaskHandler = () => {
     const task = createTask(taskTitle);
 
     tasks.unshift(task);
-
-    const $taskElement = createTaskElement(task);
-
-    $taskElement.after($inputWrapper);
-
-    $taskList.insertBefore($taskElement, $taskList.children[1]);
+    pageTasks.unshift(task);
 
     clearInputField($taskInput);
     clearInputField($searchInput);
@@ -61,6 +65,8 @@ const addTaskHandler = () => {
     }
 
     showMessage(true, "Task added successfully.");
+
+    renderTasks(pageTasks);
 };
 
 const createTask = (taskTitle) => {
@@ -73,18 +79,15 @@ const createTask = (taskTitle) => {
     };
 };
 
-const deleteTaskHandler = (event) => {
-    const $taskElement = event.currentTarget.parentElement.parentElement;
-
-    const taskId = parseInt($taskElement.id);
-
-    $taskElement.remove();
-
+const deleteTaskHandler = (taskId) => {
     tasks = tasks.filter((task) => task.id !== taskId);
+    pageTasks = tasks.filter((task) => task.id !== taskId);
 
     if (tasks.length == 0) {
         toggleFilterElements();
     }
+
+    renderTasks(pageTasks);
 };
 
 const updateTaskEditHandler = (
@@ -242,9 +245,7 @@ const createTaskElement = (task) => {
         $completdBadgeElement.innerHTML = `Completed in ${completedIn} days`;
     }
 
-    $deleteButton.addEventListener("click", (event) =>
-        deleteTaskHandler(event)
-    );
+    $deleteButton.addEventListener("click", () => deleteTaskHandler(task.id));
     $editButton.addEventListener("click", () =>
         toggleElements(
             $taskTitleElement,
@@ -314,7 +315,43 @@ const createTaskElement = (task) => {
 const searchTaskHandler = () => {
     const searchedTasks = searchTasks($searchInput.value);
 
-    renderTasks(searchedTasks);
+    renderTasks(pageTasks);
+};
+
+const getPaginatedList = (tasks) => {
+    if ($inputWrapper.classList.contains("hide")) {
+        endIndex = currentPage * TASK_PER_PAGE;
+        pageAdjustmentCount = 1;
+    } else {
+        endIndex = currentPage * TASK_PER_PAGE - 1;
+        pageAdjustmentCount = 0;
+    }
+
+    totalPage =
+        Math.floor((tasks.length - pageAdjustmentCount) / TASK_PER_PAGE) + 1;
+
+    if (totalPage > 1) {
+        $paginationButton.classList.remove("hide");
+    } else {
+        $paginationButton.classList.add("hide");
+    }
+
+    if (currentPage < totalPage) {
+        $paginationButton.textContent = "Load More";
+    } else {
+        $paginationButton.textContent = "Show Less";
+    }
+
+    return tasks?.slice(START_INDEX, endIndex);
+};
+
+const paginationHandler = () => {
+    if (currentPage < totalPage) {
+        currentPage += 1;
+    } else {
+        currentPage = 1;
+    }
+    renderTasks(pageTasks);
 };
 
 const searchTasks = (searchInput) => {
@@ -328,7 +365,9 @@ const renderTasks = (tasks) => {
     $taskList.innerHTML = "";
     $taskList.appendChild($inputWrapper);
 
-    tasks.forEach((task) => {
+    const paginatedTasks = getPaginatedList(tasks);
+
+    paginatedTasks.forEach((task) => {
         $taskList.appendChild(createTaskElement(task));
     });
 
@@ -357,6 +396,8 @@ const showInputWrapper = () => {
     }
 
     $inputWrapper.classList.toggle("hide");
+
+    renderTasks(pageTasks);
 };
 
 const handleFilteredTasks = () => {
@@ -413,3 +454,5 @@ $completedFilterButton.addEventListener("click", () => {
     filterBy = "completed";
     handleFilteredTasks();
 });
+
+$paginationButton.addEventListener("click", paginationHandler);

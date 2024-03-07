@@ -21,3 +21,4 @@ export const $incompleteFilterButton = document.getElementById(
 export const $completedFilterButton = document.getElementById(
     "complete-filter-button"
 );
+export const $paginationButton = document.getElementById("pagination-button");
