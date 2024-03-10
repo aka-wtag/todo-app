@@ -32,9 +32,9 @@ import {
 } from "./svg.js";
 
 let tasks = [];
+let pageTasks = [];
 
 let filterBy;
-let pageTasks = [];
 
 const START_INDEX = 0;
 const TASK_PER_PAGE = 9;
@@ -81,7 +81,7 @@ const createTask = (taskTitle) => {
 
 const deleteTaskHandler = (taskId) => {
     tasks = tasks.filter((task) => task.id !== taskId);
-    pageTasks = tasks.filter((task) => task.id !== taskId);
+    pageTasks = pageTasks.filter((task) => task.id !== taskId);
 
     if (tasks.length == 0) {
         toggleFilterElements();
@@ -313,7 +313,7 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
-    const searchedTasks = searchTasks($searchInput.value);
+    pageTasks = searchTasks($searchInput.value);
 
     renderTasks(pageTasks);
 };
@@ -401,19 +401,15 @@ const showInputWrapper = () => {
 };
 
 const handleFilteredTasks = () => {
-    let filteredTasks = tasks;
-
-    if ($searchInput.value !== "") {
-        filteredTasks = searchTasks($searchInput.value);
-    }
+    pageTasks = searchTasks($searchInput.value);
 
     if (filterBy === "incomplete") {
-        filteredTasks = filteredTasks.filter((task) => !task.isDone);
+        pageTasks = pageTasks.filter((task) => !task.isDone);
     } else if (filterBy === "completed") {
-        filteredTasks = filteredTasks.filter((task) => task.isDone);
+        pageTasks = pageTasks.filter((task) => task.isDone);
     }
 
-    renderTasks(filteredTasks);
+    renderTasks(pageTasks);
 };
 
 const handleSearchButton = () => {

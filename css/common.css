@@ -32,7 +32,8 @@ textarea {
 .button,
 .button-icon,
 .button-primary,
-.button-secondary {
+.button-secondary,
+.button-ternary {
     cursor: pointer;
     font-weight: var(--var-font-weight-500);
     border-radius: 0.3rem;
