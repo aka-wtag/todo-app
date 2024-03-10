@@ -32,7 +32,7 @@ import {
 
 let tasks = [];
 
-let filterBy;
+let filterBy = "all";
 
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
@@ -56,8 +56,10 @@ const addTaskHandler = () => {
     clearInputField($taskInput);
     clearInputField($searchInput);
 
-    if (tasks.length == 1) {
+    if (tasks.length === 1) {
         toggleFilterElements();
+
+        handleActiveFilter();
     }
 
     showMessage(true, "Task added successfully.");
@@ -82,8 +84,10 @@ const deleteTaskHandler = (event) => {
 
     tasks = tasks.filter((task) => task.id !== taskId);
 
-    if (tasks.length == 0) {
+    if (tasks.length === 0) {
         toggleFilterElements();
+
+        handleActiveFilter();
     }
 };
 
@@ -312,7 +316,9 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
-    const searchedTasks = searchTasks($searchInput.value);
+    let searchedTasks = searchTasks($searchInput.value);
+
+    searchedTasks = filterTasks(searchedTasks);
 
     renderTasks(searchedTasks);
 };
@@ -366,13 +372,18 @@ const handleFilteredTasks = () => {
         filteredTasks = searchTasks($searchInput.value);
     }
 
-    if (filterBy === "incomplete") {
-        filteredTasks = filteredTasks.filter((task) => !task.isDone);
-    } else if (filterBy === "completed") {
-        filteredTasks = filteredTasks.filter((task) => task.isDone);
-    }
+    filteredTasks = filterTasks(filteredTasks);
 
     renderTasks(filteredTasks);
+};
+
+const filterTasks = (tasks) => {
+    if (filterBy === "incomplete") {
+        return tasks.filter((task) => !task.isDone);
+    } else if (filterBy === "completed") {
+        return tasks.filter((task) => task.isDone);
+    }
+    return tasks;
 };
 
 const handleSearchButton = () => {
@@ -401,15 +412,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
 });
 
+const handleActiveFilter = () => {
+    $allFilterButton.classList.remove("active-filter");
+    $incompleteFilterButton.classList.remove("active-filter");
+    $completedFilterButton.classList.remove("active-filter");
+
+    if (filterBy === "all") {
+        $allFilterButton.classList.add("active-filter");
+    } else if (filterBy === "incomplete") {
+        $incompleteFilterButton.classList.add("active-filter");
+    } else {
+        $completedFilterButton.classList.add("active-filter");
+    }
+};
+
 $allFilterButton.addEventListener("click", () => {
     filterBy = "all";
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });
 $incompleteFilterButton.addEventListener("click", () => {
     filterBy = "incomplete";
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });
 $completedFilterButton.addEventListener("click", () => {
     filterBy = "completed";
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });

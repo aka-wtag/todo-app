@@ -230,3 +230,8 @@ header {
     justify-content: center;
     align-items: center;
 }
+
+.active-filter {
+    color: var(--var-white-color);
+    background: var(--var-violet-color-v3);
+}
