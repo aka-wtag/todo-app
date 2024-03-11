@@ -331,6 +331,7 @@ const searchTaskHandler = () => {
 
 const searchTasks = (searchInput) => {
     const searchedTask = sanitizeInput(searchInput).toLowerCase();
+
     return tasks.filter((task) =>
         task.title.toLowerCase().includes(searchedTask)
     );
@@ -338,7 +339,9 @@ const searchTasks = (searchInput) => {
 
 const handleSearchButton = () => {
     $searchInput.value = "";
+
     $searchInput.hidden = !$searchInput.hidden;
+
     if (!$searchInput.hidden) {
         $searchInput.focus();
     } else {
@@ -364,6 +367,7 @@ const filterTasks = (tasks) => {
     } else if (filterBy === COMPLETED) {
         return tasks.filter((task) => task.isDone);
     }
+
     return tasks;
 };
 
