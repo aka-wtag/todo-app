@@ -29,10 +29,11 @@ import {
     PLUS_ICON,
     CANCEL_ICON,
 } from "./svg.js";
+import { ALL, INCOMPLETE, COMPLETED } from "./const.js";
 
 let tasks = [];
 
-let filterBy = "all";
+let filterBy = ALL;
 
 const addTaskHandler = () => {
     const taskTitle = sanitizeInput($taskInput.value);
@@ -54,7 +55,6 @@ const addTaskHandler = () => {
     $taskList.insertBefore($taskElement, $taskList.children[1]);
 
     clearInputField($taskInput);
-    clearInputField($searchInput);
 
     if (tasks.length === 1) {
         toggleFilterElements();
@@ -63,6 +63,8 @@ const addTaskHandler = () => {
     }
 
     showMessage(true, "Task added successfully.");
+
+    handlePageTasks();
 };
 
 const createTask = (taskTitle) => {
@@ -112,7 +114,7 @@ const updateTaskEditHandler = (
 
     $taskTitleElement.innerHTML = `${task.title}`;
 
-    toggleElements(
+    toggleEditElements(
         $taskTitleElement,
         $taskCreatedElement,
         $inputElement,
@@ -125,7 +127,7 @@ const updateTaskEditHandler = (
     showMessage(true, "Changes are saved successfully");
 };
 
-const toggleElements = (
+const toggleEditElements = (
     $taskTitleElement,
     $taskCreatedElement,
     $inputElement,
@@ -182,6 +184,8 @@ const markDoneTaskHandler = (
     const completedIn = showCompletedTime(task.createdAt, task.doneAt);
 
     $completdBadgeElement.innerHTML = `Completed in ${completedIn} days`;
+
+    handlePageTasks();
 };
 
 const createTaskElement = (task) => {
@@ -250,7 +254,7 @@ const createTaskElement = (task) => {
         deleteTaskHandler(event)
     );
     $editButton.addEventListener("click", () =>
-        toggleElements(
+        toggleEditElements(
             $taskTitleElement,
             $taskCreatedElement,
             $inputElement,
@@ -263,7 +267,7 @@ const createTaskElement = (task) => {
     $cancelButton.addEventListener("click", () => {
         $inputElement.value = task.title;
         showMessage(false, "We couldn’t save your changes");
-        toggleElements(
+        toggleEditElements(
             $taskTitleElement,
             $taskCreatedElement,
             $inputElement,
@@ -318,7 +322,9 @@ const createTaskElement = (task) => {
 const searchTaskHandler = () => {
     let searchedTasks = searchTasks($searchInput.value);
 
-    searchedTasks = filterTasks(searchedTasks);
+    if (filterBy !== ALL) {
+        searchedTasks = filterTasks(searchedTasks);
+    }
 
     renderTasks(searchedTasks);
 };
@@ -330,15 +336,63 @@ const searchTasks = (searchInput) => {
     );
 };
 
-const renderTasks = (tasks) => {
-    $taskList.innerHTML = "";
-    $taskList.appendChild($inputWrapper);
+const handleSearchButton = () => {
+    $searchInput.value = "";
+    $searchInput.hidden = !$searchInput.hidden;
+    if (!$searchInput.hidden) {
+        $searchInput.focus();
+    } else {
+        handlePageTasks();
+    }
+};
 
-    tasks.forEach((task) => {
-        $taskList.appendChild(createTaskElement(task));
-    });
+const handleFilteredTasks = () => {
+    let filteredTasks = tasks;
 
-    $taskList.appendChild($blankFieldWrapper);
+    if ($searchInput.value !== "") {
+        filteredTasks = searchTasks($searchInput.value);
+    }
+
+    filteredTasks = filterTasks(filteredTasks);
+
+    renderTasks(filteredTasks);
+};
+
+const filterTasks = (tasks) => {
+    if (filterBy === INCOMPLETE) {
+        return tasks.filter((task) => !task.isDone);
+    } else if (filterBy === COMPLETED) {
+        return tasks.filter((task) => task.isDone);
+    }
+    return tasks;
+};
+
+const handleActiveFilter = () => {
+    $allFilterButton.classList.remove("active-filter");
+    $incompleteFilterButton.classList.remove("active-filter");
+    $completedFilterButton.classList.remove("active-filter");
+
+    if (filterBy === ALL) {
+        $allFilterButton.classList.add("active-filter");
+    } else if (filterBy === INCOMPLETE) {
+        $incompleteFilterButton.classList.add("active-filter");
+    } else {
+        $completedFilterButton.classList.add("active-filter");
+    }
+};
+
+const handlePageTasks = () => {
+    let pageTasks = tasks;
+
+    if ($searchInput.value !== "") {
+        pageTasks = searchTasks($searchInput.value);
+    }
+
+    if (filterBy !== ALL) {
+        pageTasks = filterTasks(pageTasks);
+    }
+
+    renderTasks(pageTasks);
 };
 
 const showInputWrapper = () => {
@@ -365,35 +419,15 @@ const showInputWrapper = () => {
     $inputWrapper.classList.toggle("hide");
 };
 
-const handleFilteredTasks = () => {
-    let filteredTasks = tasks;
+const renderTasks = (tasks) => {
+    $taskList.innerHTML = "";
+    $taskList.appendChild($inputWrapper);
 
-    if ($searchInput.value !== "") {
-        filteredTasks = searchTasks($searchInput.value);
-    }
+    tasks.forEach((task) => {
+        $taskList.appendChild(createTaskElement(task));
+    });
 
-    filteredTasks = filterTasks(filteredTasks);
-
-    renderTasks(filteredTasks);
-};
-
-const filterTasks = (tasks) => {
-    if (filterBy === "incomplete") {
-        return tasks.filter((task) => !task.isDone);
-    } else if (filterBy === "completed") {
-        return tasks.filter((task) => task.isDone);
-    }
-    return tasks;
-};
-
-const handleSearchButton = () => {
-    $searchInput.value = "";
-    $searchInput.hidden = !$searchInput.hidden;
-    if (!$searchInput.hidden) {
-        $searchInput.focus();
-    } else {
-        renderTasks(tasks);
-    }
+    $taskList.appendChild($blankFieldWrapper);
 };
 
 $addButton.addEventListener("click", addTaskHandler);
@@ -412,36 +446,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
 });
 
-const handleActiveFilter = () => {
-    $allFilterButton.classList.remove("active-filter");
-    $incompleteFilterButton.classList.remove("active-filter");
-    $completedFilterButton.classList.remove("active-filter");
-
-    if (filterBy === "all") {
-        $allFilterButton.classList.add("active-filter");
-    } else if (filterBy === "incomplete") {
-        $incompleteFilterButton.classList.add("active-filter");
-    } else {
-        $completedFilterButton.classList.add("active-filter");
-    }
-};
-
 $allFilterButton.addEventListener("click", () => {
-    filterBy = "all";
+    filterBy = ALL;
 
     handleActiveFilter();
 
     handleFilteredTasks();
 });
 $incompleteFilterButton.addEventListener("click", () => {
-    filterBy = "incomplete";
+    filterBy = INCOMPLETE;
 
     handleActiveFilter();
 
     handleFilteredTasks();
 });
 $completedFilterButton.addEventListener("click", () => {
-    filterBy = "completed";
+    filterBy = COMPLETED;
 
     handleActiveFilter();
 

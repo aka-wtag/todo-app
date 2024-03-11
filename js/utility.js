@@ -1,7 +1,6 @@
 import { $messageElement } from "./element.js";
 import { DONE_ICON } from "./svg.js";
-
-const reg = /[&<>"'/`]/gi;
+import { reg } from "./const.js";
 
 export const sanitizeInput = (value) => {
     return value.replace(reg, "").trim();
