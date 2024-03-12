@@ -30,11 +30,11 @@ import {
     PLUS_ICON,
     CANCEL_ICON,
 } from "./svg.js";
+import { ALL, INCOMPLETE, COMPLETED } from "./const.js";
 
 let tasks = [];
-let pageTasks = [];
 
-let filterBy;
+let filterBy = ALL;
 
 const START_INDEX = 0;
 const TASK_PER_PAGE = 9;
@@ -55,18 +55,18 @@ const addTaskHandler = () => {
     const task = createTask(taskTitle);
 
     tasks.unshift(task);
-    pageTasks.unshift(task);
 
     clearInputField($taskInput);
-    clearInputField($searchInput);
 
-    if (tasks.length == 1) {
+    if (tasks.length === 1) {
         toggleFilterElements();
+
+        handleActiveFilter();
     }
 
     showMessage(true, "Task added successfully.");
 
-    renderTasks(pageTasks);
+    handlePageTasks();
 };
 
 const createTask = (taskTitle) => {
@@ -81,13 +81,12 @@ const createTask = (taskTitle) => {
 
 const deleteTaskHandler = (taskId) => {
     tasks = tasks.filter((task) => task.id !== taskId);
-    pageTasks = pageTasks.filter((task) => task.id !== taskId);
 
-    if (tasks.length == 0) {
+    if (tasks.length === 0) {
         toggleFilterElements();
-    }
 
-    renderTasks(pageTasks);
+        handleActiveFilter();
+    }
 };
 
 const updateTaskEditHandler = (
@@ -111,7 +110,7 @@ const updateTaskEditHandler = (
 
     $taskTitleElement.innerHTML = `${task.title}`;
 
-    toggleElements(
+    toggleEditElements(
         $taskTitleElement,
         $taskCreatedElement,
         $inputElement,
@@ -124,7 +123,7 @@ const updateTaskEditHandler = (
     showMessage(true, "Changes are saved successfully");
 };
 
-const toggleElements = (
+const toggleEditElements = (
     $taskTitleElement,
     $taskCreatedElement,
     $inputElement,
@@ -181,6 +180,8 @@ const markDoneTaskHandler = (
     const completedIn = showCompletedTime(task.createdAt, task.doneAt);
 
     $completdBadgeElement.innerHTML = `Completed in ${completedIn} days`;
+
+    handlePageTasks();
 };
 
 const createTaskElement = (task) => {
@@ -247,7 +248,7 @@ const createTaskElement = (task) => {
 
     $deleteButton.addEventListener("click", () => deleteTaskHandler(task.id));
     $editButton.addEventListener("click", () =>
-        toggleElements(
+        toggleEditElements(
             $taskTitleElement,
             $taskCreatedElement,
             $inputElement,
@@ -260,7 +261,7 @@ const createTaskElement = (task) => {
     $cancelButton.addEventListener("click", () => {
         $inputElement.value = task.title;
         showMessage(false, "We couldn’t save your changes");
-        toggleElements(
+        toggleEditElements(
             $taskTitleElement,
             $taskCreatedElement,
             $inputElement,
@@ -313,9 +314,13 @@ const createTaskElement = (task) => {
 };
 
 const searchTaskHandler = () => {
-    pageTasks = searchTasks($searchInput.value);
+    let searchedTasks = searchTasks($searchInput.value);
 
-    renderTasks(pageTasks);
+    if (filterBy !== ALL) {
+        searchedTasks = filterTasks(searchedTasks);
+    }
+
+    renderTasks(searchedTasks);
 };
 
 const getPaginatedList = (tasks) => {
@@ -351,27 +356,78 @@ const paginationHandler = () => {
     } else {
         currentPage = 1;
     }
-    renderTasks(pageTasks);
+
+    handlePageTasks();
 };
 
 const searchTasks = (searchInput) => {
     const searchedTask = sanitizeInput(searchInput).toLowerCase();
+
     return tasks.filter((task) =>
         task.title.toLowerCase().includes(searchedTask)
     );
 };
 
-const renderTasks = (tasks) => {
-    $taskList.innerHTML = "";
-    $taskList.appendChild($inputWrapper);
+const handleSearchButton = () => {
+    $searchInput.value = "";
 
-    const paginatedTasks = getPaginatedList(tasks);
+    $searchInput.hidden = !$searchInput.hidden;
 
-    paginatedTasks.forEach((task) => {
-        $taskList.appendChild(createTaskElement(task));
-    });
+    if (!$searchInput.hidden) {
+        $searchInput.focus();
+    } else {
+        handlePageTasks();
+    }
+};
 
-    $taskList.appendChild($blankFieldWrapper);
+const handleFilteredTasks = () => {
+    let filteredTasks = tasks;
+
+    if ($searchInput.value !== "") {
+        filteredTasks = searchTasks($searchInput.value);
+    }
+
+    filteredTasks = filterTasks(filteredTasks);
+
+    renderTasks(filteredTasks);
+};
+
+const filterTasks = (tasks) => {
+    if (filterBy === INCOMPLETE) {
+        return tasks.filter((task) => !task.isDone);
+    } else if (filterBy === COMPLETED) {
+        return tasks.filter((task) => task.isDone);
+    }
+
+    return tasks;
+};
+
+const handleActiveFilter = () => {
+    $allFilterButton.classList.remove("active-filter");
+    $incompleteFilterButton.classList.remove("active-filter");
+    $completedFilterButton.classList.remove("active-filter");
+
+    if (filterBy === ALL) {
+        $allFilterButton.classList.add("active-filter");
+    } else if (filterBy === INCOMPLETE) {
+        $incompleteFilterButton.classList.add("active-filter");
+    } else {
+        $completedFilterButton.classList.add("active-filter");
+    }
+};
+
+const handlePageTasks = () => {
+    let pageTasks = tasks;
+
+    if ($searchInput.value !== "") {
+        pageTasks = searchTasks($searchInput.value);
+    }
+
+    if (filterBy !== ALL) {
+        pageTasks = filterTasks(pageTasks);
+    }
+
+    renderTasks(pageTasks);
 };
 
 const showInputWrapper = () => {
@@ -397,29 +453,20 @@ const showInputWrapper = () => {
 
     $inputWrapper.classList.toggle("hide");
 
-    renderTasks(pageTasks);
+    handlePageTasks();
 };
 
-const handleFilteredTasks = () => {
-    pageTasks = searchTasks($searchInput.value);
+const renderTasks = (tasks) => {
+    $taskList.innerHTML = "";
+    $taskList.appendChild($inputWrapper);
 
-    if (filterBy === "incomplete") {
-        pageTasks = pageTasks.filter((task) => !task.isDone);
-    } else if (filterBy === "completed") {
-        pageTasks = pageTasks.filter((task) => task.isDone);
-    }
+    const paginatedTasks = getPaginatedList(tasks);
 
-    renderTasks(pageTasks);
-};
+    paginatedTasks.forEach((task) => {
+        $taskList.appendChild(createTaskElement(task));
+    });
 
-const handleSearchButton = () => {
-    $searchInput.value = "";
-    $searchInput.hidden = !$searchInput.hidden;
-    if (!$searchInput.hidden) {
-        $searchInput.focus();
-    } else {
-        renderTasks(tasks);
-    }
+    $taskList.appendChild($blankFieldWrapper);
 };
 
 $addButton.addEventListener("click", addTaskHandler);
@@ -439,15 +486,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 $allFilterButton.addEventListener("click", () => {
-    filterBy = "all";
+    filterBy = ALL;
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });
 $incompleteFilterButton.addEventListener("click", () => {
-    filterBy = "incomplete";
+    filterBy = INCOMPLETE;
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });
 $completedFilterButton.addEventListener("click", () => {
-    filterBy = "completed";
+    filterBy = COMPLETED;
+
+    handleActiveFilter();
+
     handleFilteredTasks();
 });
 

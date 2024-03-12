@@ -227,6 +227,11 @@ header {
     align-items: center;
 }
 
+.active-filter {
+    color: var(--var-white-color);
+    background: var(--var-violet-color-v3);
+}
+
 .load-more-button {
     display: block;
     margin: 3.56rem auto;
