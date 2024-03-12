@@ -87,6 +87,8 @@ const deleteTaskHandler = (taskId) => {
 
         handleActiveFilter();
     }
+
+    handleFilteredTasks();
 };
 
 const updateTaskEditHandler = (
