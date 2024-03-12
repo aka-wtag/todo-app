@@ -30,14 +30,18 @@ import {
     PLUS_ICON,
     CANCEL_ICON,
 } from "./svg.js";
-import { ALL, INCOMPLETE, COMPLETED } from "./const.js";
+import {
+    ALL,
+    INCOMPLETE,
+    COMPLETED,
+    START_INDEX,
+    TASK_PER_PAGE,
+} from "./const.js";
 
 let tasks = [];
 
 let filterBy = ALL;
 
-const START_INDEX = 0;
-const TASK_PER_PAGE = 9;
 let endIndex;
 let currentPage = 1;
 let totalPage = 1;
