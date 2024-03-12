@@ -344,9 +344,11 @@ const handleSearchButton = () => {
 
     if (!$searchInput.hidden) {
         $searchInput.focus();
-    } else {
-        handlePageTasks();
+
+        return;
     }
+
+    handlePageTasks();
 };
 
 const handleFilteredTasks = () => {
