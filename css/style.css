@@ -235,11 +235,6 @@ header {
 .load-more-button {
     display: block;
     margin: 3.56rem auto;
-    padding: 0.56rem 1.25rem;
-    font-size: 1rem;
-    color: var(--var-white-color);
-    background: var(--var-black-color);
-    border: none;
 }
 
 .hide {
